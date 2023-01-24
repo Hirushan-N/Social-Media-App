@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController');
+const multer = require('multer') //npm install --save multer
 const AUTHENTICATED = require('../middleware/Authenticator');
-const multer = require('multer');
+const postController = require('../controllers/PostController')
 
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './uploads/profileImages');
+        cb(null, './uploads/postImages');
     },
     filename: function (req, file, cb) {
         cb(null, new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname);
@@ -33,22 +33,27 @@ const upload = multer({
 
 
 
-router.post(
-    '/signup',
-    upload.single('profileImage'),
-    userController.Users_POST_SignUp);
 
-router.post(
-    '/login',
-    userController.Users_POST_Login);
-
-router.get('/:userId',
+router.get('/',
     AUTHENTICATED,
-    userController.Users_GET_ReadById);
+    postController.Posts_GET_ReadAll);
 
-router.delete(
-    '/:userId',
+router.post('/',
     AUTHENTICATED,
-    userController.Users_DELETE_Delete);
+    upload.single('postImage'),
+    postController.Posts_POST_Create);
+
+router.get('/:postId',
+    AUTHENTICATED,
+    postController.Posts_GET_ReadById);
+
+router.patch('/:postId',
+    AUTHENTICATED,
+    postController.Posts_PATCH_Update);
+
+router.delete('/:postId',
+    AUTHENTICATED,
+    postController.Posts_DELETE_Delete);
+
 
 module.exports = router;

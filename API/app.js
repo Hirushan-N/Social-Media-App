@@ -5,6 +5,8 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose'); 
 
 const userRoutes = require('./src/routes/userRoutes');
+const postRoutes = require('./src/routes/postRoutes');
+
 
 //MongoDB connection
 mongoose.Promise = global.Promise;
@@ -38,6 +40,7 @@ app.use((req,res,next) => {
 
 
 app.use('/users',userRoutes);
+app.use('/posts',postRoutes);
 
 //error handling
 app.use((req,res,next) => {
