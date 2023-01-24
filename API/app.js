@@ -4,14 +4,17 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser') 
 const mongoose = require('mongoose'); 
 
+const userRoutes = require('./src/routes/userRoutes');
+
 //MongoDB connection
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', false);
-mongoose.connect('mongodb://127.0.0.1:27017/ExpressJS_Shop_API')
+mongoose.connect('mongodb://127.0.0.1:27017/SocialMedia_MERN')
 .then(() => console.log('Connected to DB!'));
 
 
 app.use(morgan('dev'));
+app.use('/uploads/profileImages',express.static('uploads/profileImages'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use((req,res,next) => {
@@ -34,11 +37,7 @@ app.use((req,res,next) => {
 });
 
 
-app.use('/hello',(req,res,next) => {
-    res.status(200).json({
-        message : "Hello Nadeesh"
-    });
-});
+app.use('/users',userRoutes);
 
 //error handling
 app.use((req,res,next) => {
