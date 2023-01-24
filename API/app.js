@@ -1,8 +1,12 @@
 const express = require('express');
-const app = express();
 const morgan = require('morgan'); 
 const bodyParser = require('body-parser') 
 const mongoose = require('mongoose'); 
+const cors = require('cors');
+const app = express({
+    origin:"http://localhost:3000"
+});
+app.use(cors());
 
 const userRoutes = require('./src/routes/userRoutes');
 const postRoutes = require('./src/routes/postRoutes');
