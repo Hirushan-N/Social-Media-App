@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import userService from '../../services/userService';
 import './login.component.css'
 import { useNavigate } from 'react-router-dom';
+import reCAPTCHA, { ReCAPTCHA } from "react-google-recaptcha";
 
 
 export default function Login() {
@@ -11,6 +12,8 @@ export default function Login() {
   const handleClick = event => {
     setIsActive(current => !current);
   };
+
+  const captchaRef = useRef(null);
 
   const [name, setName] = useState('Ravindu Bhagya');
   const [gender, setGender] = useState('Not selected');
@@ -29,6 +32,8 @@ export default function Login() {
 
   const userLogin = (event) => {
     event.preventDefault();
+    //const token = captchaRef.current.getValue();
+    //captchaRef.current.reset();
     let loginRequest = {
       email: email,
       password: password
@@ -108,13 +113,13 @@ export default function Login() {
                 <i className="fa fa-camera upload-button" />
               </div>
               <label>
-                <input type="text" placeholder="Name" onChange={changeNameHandler}/>
+                <input type="text" placeholder="Name" onChange={changeNameHandler} />
               </label>
               <label>
-                <input type="email" placeholder="Email" onChange={changeEmailHandler}/>
+                <input type="email" placeholder="Email" onChange={changeEmailHandler} />
               </label>
               <label>
-                <input type="password" placeholder="Password" onChange={changePasswordHandler}/>
+                <input type="password" placeholder="Password" onChange={changePasswordHandler} />
               </label>
               <button onClick={userSignUp}>Sign Up</button>
             </form>
@@ -129,6 +134,10 @@ export default function Login() {
               <label>
                 <input type="password" placeholder="Password" onChange={changePasswordHandler} />
               </label>
+              <reCAPTCHA
+                sitekey={'6Lc2sjAkAAAAAK1S-fAnCAKf7OxwMb7ceXQftrwN'}
+                ref={captchaRef}
+              />
               <a href='/'>Forgot your password?</a>
               <button onClick={userLogin}>Sign In</button>
             </form>
