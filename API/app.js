@@ -15,7 +15,10 @@ const postRoutes = require('./src/routes/postRoutes');
 //MongoDB connection
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', false);
+/************** ATLAS **************/
 mongoose.connect('mongodb+srv://SMMERN:SMMERN@socialmedia-mern.gtlz7gd.mongodb.net/?retryWrites=true&w=majority')
+/************** LOCAL MONGO DB **************/
+//mongoose.connect('mongodb://127.0.0.1:27017/SocialMedia_MERN')
 .then(() => console.log('Connected to DB!'));
 
 
