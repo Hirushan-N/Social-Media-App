@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const IsAPIAuthenticate = false; // set as false for testing
+const IsAPIAuthenticate = true; // set as false for testing
 
 module.exports = (req, res, next) => {
     try {
