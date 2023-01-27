@@ -2,12 +2,12 @@ import axios from 'axios'
 
 
 class postService{
-    getAllPosts(){
-        return axios.get('http://localhost:5000/posts/');
+    getAllPosts(authToken){
+        return axios.get('http://localhost:5000/posts/',{ headers: {"Authorization" : `Bearer ${authToken}`} });
     }
 
-    createPost(post){
-        return axios.post('http://localhost:5000/posts/',post);
+    createPost(post,authToken){
+        return axios.post('http://localhost:5000/posts/',post,{ headers: {"Authorization" : `Bearer ${authToken}`} });
     }
 }
 

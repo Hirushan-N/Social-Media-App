@@ -16,7 +16,7 @@ export default function Home() {
 
   const [postArr, setPostArr] = useState([]);
   useEffect(() => {
-    postService.getAllPosts().
+    postService.getAllPosts(authToken).
       then((res) => res)
       .then(data => {
         setPostArr(data.data.content.Posts);
@@ -74,7 +74,7 @@ export default function Home() {
     form.append('datetime', datetime);
     form.append('likes', 0);
     form.append('postImage', uploadedImage);
-    postService.createPost(form)
+    postService.createPost(form,authToken)
       .then((res) => {
         if (res) {
           if (res.status == 201) {
