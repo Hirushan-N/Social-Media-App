@@ -1,19 +1,25 @@
-import React, { Component, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import userService from '../../services/userService';
 import './login.component.css'
 import { useNavigate } from 'react-router-dom';
 
 
 export default function Login() {
+  document.body.classList.add('overflow-hidden');
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
   const handleClick = event => {
     setIsActive(current => !current);
   };
 
+  const [name, setName] = useState('Ravindu Bhagya');
+  const [gender, setGender] = useState('Not selected');
   const [email, setEmail] = useState('test1@gmail.com');
   const [password, setPassword] = useState('test1');
   const [loginResponse, setLoginResponse] = useState();
+  const changeNameHandler = (event) => {
+    setName(event.target.value);
+  };
   const changeEmailHandler = (event) => {
     setEmail(event.target.value);
   };
@@ -32,7 +38,9 @@ export default function Login() {
     userService.login(loginRequest)
       .then((res) => {
         setLoginResponse(res);
-        navigate('/home');
+        if (res.status == 200) {
+          navigate('/home', { state: res.data });
+        }
         console.log("loginResponse => " + JSON.stringify(loginResponse.data.content));
         console.log("token => " + JSON.stringify(loginResponse.data.token));
       })
@@ -41,8 +49,45 @@ export default function Login() {
       });
   };
 
+  const inputFile = useRef(null);
+  const openImageDialog = event => {
+    //console.log('openImageDialog');
+    inputFile.current.click();
+  };
+
+  const [avatar, setAvatar] = useState('https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg');
+  const [uploadedImage, setUploadedImage] = useState();
+  const onChangeFile = event => {
+    event.stopPropagation();
+    event.preventDefault();
+    setUploadedImage(event.target.files[0]);
+    setAvatar(URL.createObjectURL(event.target.files[0]));
+  };
+
+  const userSignUp = (event) => {
+    event.preventDefault();
+    let form = new FormData();
+    form.append('name', name);
+    form.append('gender', gender);
+    form.append('email', email);
+    form.append('password', password);
+    form.append('profileImage', uploadedImage);
+    console.log("loginRequest => " + JSON.stringify(form));
+
+    userService.signUp(form)
+      .then((res) => {
+        if (res.status == 201) {
+          console.log("loginResponse => " + JSON.stringify(res.data.content));
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
   return (
-    <div>
+    <div className='login-body'>
+      <input type='file' id='file' ref={inputFile} style={{ display: 'none' }} onChange={onChangeFile} />
       <div className='ocean'>
         <div className='wave'></div>
         <div className='wave'></div>
@@ -51,24 +96,27 @@ export default function Login() {
         <div className='wave'></div>
       </div>
       <section>
-        <div className={isActive ? 'container right-panel-active' : 'container'} id='container'>
+        <div className={isActive ? 'auth-container right-panel-active' : 'auth-container'} id='auth-container'>
           <div className='form-container sign-up-container'>
             <form>
               <h1>Sign Up</h1>
               <span>Use your Email for registration</span>
+              <div className="circle">
+                <img className="profile-pic" src={avatar} />
+              </div>
+              <div className="p-image" onClick={openImageDialog}>
+                <i className="fa fa-camera upload-button" />
+              </div>
               <label>
-                <input type="text" placeholder="Name" />
+                <input type="text" placeholder="Name" onChange={changeNameHandler}/>
               </label>
               <label>
-                <input type="date" placeholder="Date Of Birth" />
+                <input type="email" placeholder="Email" onChange={changeEmailHandler}/>
               </label>
               <label>
-                <input type="email" placeholder="Email" />
+                <input type="password" placeholder="Password" onChange={changePasswordHandler}/>
               </label>
-              <label>
-                <input type="password" placeholder="Password" />
-              </label>
-              <button >Sign Up</button>
+              <button onClick={userSignUp}>Sign Up</button>
             </form>
           </div>
           <div className='form-container sign-in-container'>
@@ -81,7 +129,7 @@ export default function Login() {
               <label>
                 <input type="password" placeholder="Password" onChange={changePasswordHandler} />
               </label>
-              <a href="#">Forgot your password?</a>
+              <a href='/'>Forgot your password?</a>
               <button onClick={userLogin}>Sign In</button>
             </form>
           </div>
