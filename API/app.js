@@ -1,8 +1,12 @@
 const express = require('express');
-const app = express();
 const morgan = require('morgan'); 
 const bodyParser = require('body-parser') 
 const mongoose = require('mongoose'); 
+const cors = require('cors');
+const app = express({
+    origin:"http://localhost:3000"
+});
+app.use(cors());
 
 const userRoutes = require('./src/routes/userRoutes');
 const postRoutes = require('./src/routes/postRoutes');
@@ -11,12 +15,16 @@ const postRoutes = require('./src/routes/postRoutes');
 //MongoDB connection
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', false);
-mongoose.connect('mongodb://127.0.0.1:27017/SocialMedia_MERN')
+/************** ATLAS **************/
+mongoose.connect('mongodb+srv://SMMERN:SMMERN@socialmedia-mern.gtlz7gd.mongodb.net/?retryWrites=true&w=majority')
+/************** LOCAL MONGO DB **************/
+//mongoose.connect('mongodb://127.0.0.1:27017/SocialMedia_MERN')
 .then(() => console.log('Connected to DB!'));
 
 
 app.use(morgan('dev'));
 app.use('/uploads/profileImages',express.static('uploads/profileImages'));
+app.use('/uploads/postImages',express.static('uploads/postImages'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use((req,res,next) => {
