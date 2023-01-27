@@ -2,7 +2,9 @@
 ## _Nadeesh Hirushan_
 
 
-This is my first MERN full stack application that created for Surge Internship.
+✨This is my first MERN full stack application that created for Surge Internship.
+
+### node packages that used for this MERN project..
 
 | node packages | ref |
 | ------ | ------ |
