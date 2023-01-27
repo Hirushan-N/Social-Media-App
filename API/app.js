@@ -15,7 +15,7 @@ const postRoutes = require('./src/routes/postRoutes');
 //MongoDB connection
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', false);
-mongoose.connect('mongodb://127.0.0.1:27017/SocialMedia_MERN')
+mongoose.connect('mongodb+srv://SMMERN:SMMERN@socialmedia-mern.gtlz7gd.mongodb.net/?retryWrites=true&w=majority')
 .then(() => console.log('Connected to DB!'));
 
 
